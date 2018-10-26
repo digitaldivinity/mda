@@ -13,10 +13,10 @@ template <class objType, int N>  class Mda{
 		//запишем в arrSize сдвиги
 		//например для 3,3,3
 		//будет 27,9,3
+		for (int i=0;i<N;i++) arrSize[i]=1;
 		for (int i=0;i<N;i++)
 			for (int j=i;j<N;j++)
 				arrSize[i]*=ars[j];
-
 		arr=new objType[dim];
 	}
 	private:

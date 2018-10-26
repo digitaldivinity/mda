@@ -6,7 +6,6 @@
 #include <omp.h>
 #include "mda.h"
 #define Max(a, b) ((a) > (b) ? (a) : (b))
-#define KORCH_TESTING
 typedef float fType;
 
 int i, j, k, it;
@@ -23,7 +22,7 @@ int main(int an, char **as)
 	Mda<fType,3> B(dim);
 	
   double startt, endt;
-
+	#pragma omp parallel for
   for (i = 0; i < L; i++)
     for (j = 0; j < L; j++)
       for (k = 0; k < L; k++) {
@@ -34,7 +33,7 @@ int main(int an, char **as)
           B(i,j,k) = 4 + i + j + k;
       }
       
-     #ifndef KORCH_TESTING
+     #ifdef KORCH_TESTING
      for (i = 0; i < L; i++)
     for (j = 0; j < L; j++)
       for (k = 0; k < L; k++)
@@ -48,7 +47,7 @@ int main(int an, char **as)
   /* iteration loop */
   for (it = 1; it <= ITMAX; it++){
     eps = 0;
-    
+    #pragma omp parallel for reduction(max:eps)
     for (i = 1; i < L - 1; i++)
       for (j = 1; j < L - 1; j++)
         for (k = 1; k < L - 1; k++) {
@@ -56,7 +55,7 @@ int main(int an, char **as)
           eps = Max(tmp, eps);
           A(i,j,k) = B(i,j,k);
         }
-        
+   #pragma omp parallel for
     for (i = 1; i < L - 1; i++)
       for (j = 1; j < L - 1; j++)
         for (k = 1; k < L - 1; k++)
