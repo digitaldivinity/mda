@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
-#include "arr.h"
+#include "mda.h"
 #define Max(a, b) ((a) > (b) ? (a) : (b))
-
+#define KORCH_TESTING
 typedef float fType;
 
 int i, j, k, it;
@@ -33,6 +33,17 @@ int main(int an, char **as)
         else
           B(i,j,k) = 4 + i + j + k;
       }
+      
+     #ifndef KORCH_TESTING
+     for (i = 0; i < L; i++)
+    for (j = 0; j < L; j++)
+      for (k = 0; k < L; k++)
+      B(i,j,k)=L*L*i+L*j+k;
+      for (i = 0; i < L; i++)
+    for (j = 0; j < L; j++)
+      for (k = 0; k < L; k++)
+      printf("B(%d,%d,%d)=%lf\n",i,j,k,B(i,j,k));
+     #endif
   startt = omp_get_wtime();
   /* iteration loop */
   for (it = 1; it <= ITMAX; it++){
